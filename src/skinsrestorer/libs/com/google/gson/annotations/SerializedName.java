@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package skinsrestorer.libs.com.google.gson.annotations;
 
 import java.lang.annotation.ElementType;
@@ -31,12 +30,12 @@ import java.lang.annotation.Target;
  * <p>
  * Here is an example of how this annotation is meant to be used:
  * </p>
- * 
+ *
  * <pre>
  * public class SomeClassWithFields {
  *   &#64SerializedName("name") private final String someField;
  *   private final String someOtherField;
- * 
+ *
  *   public SomeClassWithFields(String a, String b) {
  *     this.someField = a;
  *     this.someOtherField = b;
@@ -47,13 +46,13 @@ import java.lang.annotation.Target;
  * <p>
  * The following shows the output that is generated when serializing an instance of the above example class:
  * </p>
- * 
+ *
  * <pre>
  * SomeClassWithFields objectToSerialize = new SomeClassWithFields("a", "b");
  * Gson gson = new Gson();
  * String jsonRepresentation = gson.toJson(objectToSerialize);
  * System.out.println(jsonRepresentation);
- * 
+ *
  * ===== OUTPUT =====
  * {"name":"a","someOtherField":"b"}
  * </pre>
@@ -71,8 +70,8 @@ import java.lang.annotation.Target;
 @Target(ElementType.FIELD)
 public @interface SerializedName {
 
-	/**
-	 * @return the desired name of the field when it is serialized
-	 */
-	String value();
+    /**
+     * @return the desired name of the field when it is serialized
+     */
+    String value();
 }

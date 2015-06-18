@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package skinsrestorer.libs.com.google.gson;
 
 import java.lang.reflect.Type;
@@ -29,7 +28,7 @@ import java.lang.reflect.Type;
  * public class Id&lt;T&gt; {
  * 	private final Class&lt;T&gt; clazz;
  * 	private final long value;
- * 
+ *
  * 	public Id(Class&lt;T&gt; clazz, long value) {
  * 		this.clazz = clazz;
  * 		this.value = value;
@@ -68,19 +67,19 @@ import java.lang.reflect.Type;
  * </pre>
  *
  * @param <T>
- *            the type of object that will be created by this implementation.
+ * the type of object that will be created by this implementation.
  *
  * @author Inderjeet Singh
  * @author Joel Leitch
  */
 public interface InstanceCreator<T> {
 
-	/**
-	 * Gson invokes this call-back method during deserialization to create an instance of the specified type. The fields of the returned instance are overwritten with the data present in the Json. Since the prior contents of the object are destroyed and overwritten, do not return an instance that is useful elsewhere. In particular, do not return a common instance, always use {@code new} to create a new instance.
-	 *
-	 * @param type
-	 *            the parameterized T represented as a {@link Type}.
-	 * @return a default object instance of type T.
-	 */
-	public T createInstance(Type type);
+    /**
+     * Gson invokes this call-back method during deserialization to create an instance of the specified type. The fields of the returned instance are overwritten with the data present in the Json. Since the prior contents of the object are destroyed and overwritten, do not return an instance that is useful elsewhere. In particular, do not return a common instance, always use {@code new} to create a new instance.
+     *
+     * @param type
+     * the parameterized T represented as a {@link Type}.
+     * @return a default object instance of type T.
+     */
+    public T createInstance(Type type);
 }

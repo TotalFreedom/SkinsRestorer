@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package skinsrestorer.libs.com.google.gson;
 
 /**
@@ -24,48 +23,48 @@ package skinsrestorer.libs.com.google.gson;
  *
  * <p>
  * <strong>Exclude fields and objects based on a particular class type:</strong>
- * 
+ *
  * <pre class="code">
  * private static class SpecificClassExclusionStrategy implements ExclusionStrategy {
- * 	private final Class&lt;?&gt; excludedThisClass;
- * 
- * 	public SpecificClassExclusionStrategy(Class&lt;?&gt; excludedThisClass) {
- * 		this.excludedThisClass = excludedThisClass;
- * 	}
- * 
- * 	public boolean shouldSkipClass(Class&lt;?&gt; clazz) {
- * 		return excludedThisClass.equals(clazz);
- * 	}
- * 
- * 	public boolean shouldSkipField(FieldAttributes f) {
- * 		return excludedThisClass.equals(f.getDeclaredClass());
- * 	}
+ * private final Class&lt;?&gt; excludedThisClass;
+ *
+ * public SpecificClassExclusionStrategy(Class&lt;?&gt; excludedThisClass) {
+ * this.excludedThisClass = excludedThisClass;
+ * }
+ *
+ * public boolean shouldSkipClass(Class&lt;?&gt; clazz) {
+ * return excludedThisClass.equals(clazz);
+ * }
+ *
+ * public boolean shouldSkipField(FieldAttributes f) {
+ * return excludedThisClass.equals(f.getDeclaredClass());
+ * }
  * }
  * </pre>
  *
  * <p>
  * <strong>Excludes fields and objects based on a particular annotation:</strong>
- * 
+ *
  * <pre class="code">
  * public &#64interface FooAnnotation {
  *   // some implementation here
  * }
- * 
+ *
  * // Excludes any field (or class) that is tagged with an "&#64FooAnnotation"
  * private static class FooAnnotationExclusionStrategy implements ExclusionStrategy {
- *   public boolean shouldSkipClass(Class&lt;?&gt; clazz) {
- *     return clazz.getAnnotation(FooAnnotation.class) != null;
- *   }
- * 
- *   public boolean shouldSkipField(FieldAttributes f) {
- *     return f.getAnnotation(FooAnnotation.class) != null;
- *   }
+ * public boolean shouldSkipClass(Class&lt;?&gt; clazz) {
+ * return clazz.getAnnotation(FooAnnotation.class) != null;
+ * }
+ *
+ * public boolean shouldSkipField(FieldAttributes f) {
+ * return f.getAnnotation(FooAnnotation.class) != null;
+ * }
  * }
  * </pre>
  *
  * <p>
  * Now if you want to configure {@code Gson} to use a user defined exclusion strategy, then the {@code GsonBuilder} is required. The following is an example of how you can use the {@code GsonBuilder} to configure Gson to use one of the above sample:
- * 
+ *
  * <pre class="code">
  * ExclusionStrategy excludeStrings = new UserDefinedExclusionStrategy(String.class);
  * Gson gson = new GsonBuilder().setExclusionStrategies(excludeStrings).create();
@@ -73,7 +72,7 @@ package skinsrestorer.libs.com.google.gson;
  *
  * <p>
  * For certain model classes, you may only want to serialize a field, but exclude it for deserialization. To do that, you can write an {@code ExclusionStrategy} as per normal; however, you would register it with the {@link GsonBuilder#addDeserializationExclusionStrategy(ExclusionStrategy)} method. For example:
- * 
+ *
  * <pre class="code">
  * ExclusionStrategy excludeStrings = new UserDefinedExclusionStrategy(String.class);
  * Gson gson = new GsonBuilder().addDeserializationExclusionStrategy(excludeStrings).create();
@@ -90,17 +89,17 @@ package skinsrestorer.libs.com.google.gson;
  */
 public interface ExclusionStrategy {
 
-	/**
-	 * @param f
-	 *            the field object that is under test
-	 * @return true if the field should be ignored; otherwise false
-	 */
-	public boolean shouldSkipField(FieldAttributes f);
+    /**
+     * @param f
+     * the field object that is under test
+     * @return true if the field should be ignored; otherwise false
+     */
+    public boolean shouldSkipField(FieldAttributes f);
 
-	/**
-	 * @param clazz
-	 *            the class object that is under test
-	 * @return true if the class should be ignored; otherwise false
-	 */
-	public boolean shouldSkipClass(Class<?> clazz);
+    /**
+     * @param clazz
+     * the class object that is under test
+     * @return true if the class should be ignored; otherwise false
+     */
+    public boolean shouldSkipClass(Class<?> clazz);
 }

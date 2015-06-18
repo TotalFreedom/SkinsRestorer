@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package skinsrestorer.libs.com.google.gson.internal;
 
 import java.io.IOException;
@@ -22,7 +21,6 @@ import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-
 import skinsrestorer.libs.com.google.gson.ExclusionStrategy;
 import skinsrestorer.libs.com.google.gson.FieldAttributes;
 import skinsrestorer.libs.com.google.gson.Gson;
@@ -45,200 +43,203 @@ import skinsrestorer.libs.com.google.gson.stream.JsonWriter;
  * @author Jesse Wilson
  */
 public final class Excluder implements TypeAdapterFactory, Cloneable {
-	private static final double IGNORE_VERSIONS = -1.0d;
-	public static final Excluder DEFAULT = new Excluder();
 
-	private double version = IGNORE_VERSIONS;
-	private int modifiers = Modifier.TRANSIENT | Modifier.STATIC;
-	private boolean serializeInnerClasses = true;
-	private boolean requireExpose;
-	private List<ExclusionStrategy> serializationStrategies = Collections.emptyList();
-	private List<ExclusionStrategy> deserializationStrategies = Collections.emptyList();
+    private static final double IGNORE_VERSIONS = -1.0d;
+    public static final Excluder DEFAULT = new Excluder();
 
-	@Override
-	protected Excluder clone() {
-		try {
-			return (Excluder) super.clone();
-		} catch (CloneNotSupportedException e) {
-			throw new AssertionError();
-		}
-	}
+    private double version = IGNORE_VERSIONS;
+    private int modifiers = Modifier.TRANSIENT | Modifier.STATIC;
+    private boolean serializeInnerClasses = true;
+    private boolean requireExpose;
+    private List<ExclusionStrategy> serializationStrategies = Collections.emptyList();
+    private List<ExclusionStrategy> deserializationStrategies = Collections.emptyList();
 
-	public Excluder withVersion(double ignoreVersionsAfter) {
-		Excluder result = clone();
-		result.version = ignoreVersionsAfter;
-		return result;
-	}
+    @Override
+    protected Excluder clone() {
+        try {
+            return (Excluder) super.clone();
+        } catch (CloneNotSupportedException e) {
+            throw new AssertionError();
+        }
+    }
 
-	public Excluder withModifiers(int... modifiers) {
-		Excluder result = clone();
-		result.modifiers = 0;
-		for (int modifier : modifiers) {
-			result.modifiers |= modifier;
-		}
-		return result;
-	}
+    public Excluder withVersion(double ignoreVersionsAfter) {
+        Excluder result = clone();
+        result.version = ignoreVersionsAfter;
+        return result;
+    }
 
-	public Excluder disableInnerClassSerialization() {
-		Excluder result = clone();
-		result.serializeInnerClasses = false;
-		return result;
-	}
+    public Excluder withModifiers(int... modifiers) {
+        Excluder result = clone();
+        result.modifiers = 0;
+        for (int modifier : modifiers) {
+            result.modifiers |= modifier;
+        }
+        return result;
+    }
 
-	public Excluder excludeFieldsWithoutExposeAnnotation() {
-		Excluder result = clone();
-		result.requireExpose = true;
-		return result;
-	}
+    public Excluder disableInnerClassSerialization() {
+        Excluder result = clone();
+        result.serializeInnerClasses = false;
+        return result;
+    }
 
-	public Excluder withExclusionStrategy(ExclusionStrategy exclusionStrategy, boolean serialization, boolean deserialization) {
-		Excluder result = clone();
-		if (serialization) {
-			result.serializationStrategies = new ArrayList<ExclusionStrategy>(serializationStrategies);
-			result.serializationStrategies.add(exclusionStrategy);
-		}
-		if (deserialization) {
-			result.deserializationStrategies = new ArrayList<ExclusionStrategy>(deserializationStrategies);
-			result.deserializationStrategies.add(exclusionStrategy);
-		}
-		return result;
-	}
+    public Excluder excludeFieldsWithoutExposeAnnotation() {
+        Excluder result = clone();
+        result.requireExpose = true;
+        return result;
+    }
 
-	public <T> TypeAdapter<T> create(final Gson gson, final TypeToken<T> type) {
-		Class<?> rawType = type.getRawType();
-		final boolean skipSerialize = excludeClass(rawType, true);
-		final boolean skipDeserialize = excludeClass(rawType, false);
+    public Excluder withExclusionStrategy(ExclusionStrategy exclusionStrategy, boolean serialization, boolean deserialization) {
+        Excluder result = clone();
+        if (serialization) {
+            result.serializationStrategies = new ArrayList<ExclusionStrategy>(serializationStrategies);
+            result.serializationStrategies.add(exclusionStrategy);
+        }
+        if (deserialization) {
+            result.deserializationStrategies = new ArrayList<ExclusionStrategy>(deserializationStrategies);
+            result.deserializationStrategies.add(exclusionStrategy);
+        }
+        return result;
+    }
 
-		if (!skipSerialize && !skipDeserialize) {
-			return null;
-		}
+    public <T> TypeAdapter<T> create(final Gson gson, final TypeToken<T> type) {
+        Class<?> rawType = type.getRawType();
+        final boolean skipSerialize = excludeClass(rawType, true);
+        final boolean skipDeserialize = excludeClass(rawType, false);
 
-		return new TypeAdapter<T>() {
-			/** The delegate is lazily created because it may not be needed, and creating it may fail. */
-			private TypeAdapter<T> delegate;
+        if (!skipSerialize && !skipDeserialize) {
+            return null;
+        }
 
-			@Override
-			public T read(JsonReader in) throws IOException {
-				if (skipDeserialize) {
-					in.skipValue();
-					return null;
-				}
-				return delegate().read(in);
-			}
+        return new TypeAdapter<T>() {
+            /**
+             * The delegate is lazily created because it may not be needed, and creating it may fail.
+             */
+            private TypeAdapter<T> delegate;
 
-			@Override
-			public void write(JsonWriter out, T value) throws IOException {
-				if (skipSerialize) {
-					out.nullValue();
-					return;
-				}
-				delegate().write(out, value);
-			}
+            @Override
+            public T read(JsonReader in) throws IOException {
+                if (skipDeserialize) {
+                    in.skipValue();
+                    return null;
+                }
+                return delegate().read(in);
+            }
 
-			private TypeAdapter<T> delegate() {
-				TypeAdapter<T> d = delegate;
-				return d != null ? d : (delegate = gson.getDelegateAdapter(Excluder.this, type));
-			}
-		};
-	}
+            @Override
+            public void write(JsonWriter out, T value) throws IOException {
+                if (skipSerialize) {
+                    out.nullValue();
+                    return;
+                }
+                delegate().write(out, value);
+            }
 
-	public boolean excludeField(Field field, boolean serialize) {
-		if ((modifiers & field.getModifiers()) != 0) {
-			return true;
-		}
+            private TypeAdapter<T> delegate() {
+                TypeAdapter<T> d = delegate;
+                return d != null ? d : (delegate = gson.getDelegateAdapter(Excluder.this, type));
+            }
+        };
+    }
 
-		if (version != Excluder.IGNORE_VERSIONS && !isValidVersion(field.getAnnotation(Since.class), field.getAnnotation(Until.class))) {
-			return true;
-		}
+    public boolean excludeField(Field field, boolean serialize) {
+        if ((modifiers & field.getModifiers()) != 0) {
+            return true;
+        }
 
-		if (field.isSynthetic()) {
-			return true;
-		}
+        if (version != Excluder.IGNORE_VERSIONS && !isValidVersion(field.getAnnotation(Since.class), field.getAnnotation(Until.class))) {
+            return true;
+        }
 
-		if (requireExpose) {
-			Expose annotation = field.getAnnotation(Expose.class);
-			if (annotation == null || (serialize ? !annotation.serialize() : !annotation.deserialize())) {
-				return true;
-			}
-		}
+        if (field.isSynthetic()) {
+            return true;
+        }
 
-		if (!serializeInnerClasses && isInnerClass(field.getType())) {
-			return true;
-		}
+        if (requireExpose) {
+            Expose annotation = field.getAnnotation(Expose.class);
+            if (annotation == null || (serialize ? !annotation.serialize() : !annotation.deserialize())) {
+                return true;
+            }
+        }
 
-		if (isAnonymousOrLocal(field.getType())) {
-			return true;
-		}
+        if (!serializeInnerClasses && isInnerClass(field.getType())) {
+            return true;
+        }
 
-		List<ExclusionStrategy> list = serialize ? serializationStrategies : deserializationStrategies;
-		if (!list.isEmpty()) {
-			FieldAttributes fieldAttributes = new FieldAttributes(field);
-			for (ExclusionStrategy exclusionStrategy : list) {
-				if (exclusionStrategy.shouldSkipField(fieldAttributes)) {
-					return true;
-				}
-			}
-		}
+        if (isAnonymousOrLocal(field.getType())) {
+            return true;
+        }
 
-		return false;
-	}
+        List<ExclusionStrategy> list = serialize ? serializationStrategies : deserializationStrategies;
+        if (!list.isEmpty()) {
+            FieldAttributes fieldAttributes = new FieldAttributes(field);
+            for (ExclusionStrategy exclusionStrategy : list) {
+                if (exclusionStrategy.shouldSkipField(fieldAttributes)) {
+                    return true;
+                }
+            }
+        }
 
-	public boolean excludeClass(Class<?> clazz, boolean serialize) {
-		if (version != Excluder.IGNORE_VERSIONS && !isValidVersion(clazz.getAnnotation(Since.class), clazz.getAnnotation(Until.class))) {
-			return true;
-		}
+        return false;
+    }
 
-		if (!serializeInnerClasses && isInnerClass(clazz)) {
-			return true;
-		}
+    public boolean excludeClass(Class<?> clazz, boolean serialize) {
+        if (version != Excluder.IGNORE_VERSIONS && !isValidVersion(clazz.getAnnotation(Since.class), clazz.getAnnotation(Until.class))) {
+            return true;
+        }
 
-		if (isAnonymousOrLocal(clazz)) {
-			return true;
-		}
+        if (!serializeInnerClasses && isInnerClass(clazz)) {
+            return true;
+        }
 
-		List<ExclusionStrategy> list = serialize ? serializationStrategies : deserializationStrategies;
-		for (ExclusionStrategy exclusionStrategy : list) {
-			if (exclusionStrategy.shouldSkipClass(clazz)) {
-				return true;
-			}
-		}
+        if (isAnonymousOrLocal(clazz)) {
+            return true;
+        }
 
-		return false;
-	}
+        List<ExclusionStrategy> list = serialize ? serializationStrategies : deserializationStrategies;
+        for (ExclusionStrategy exclusionStrategy : list) {
+            if (exclusionStrategy.shouldSkipClass(clazz)) {
+                return true;
+            }
+        }
 
-	private boolean isAnonymousOrLocal(Class<?> clazz) {
-		return !Enum.class.isAssignableFrom(clazz) && (clazz.isAnonymousClass() || clazz.isLocalClass());
-	}
+        return false;
+    }
 
-	private boolean isInnerClass(Class<?> clazz) {
-		return clazz.isMemberClass() && !isStatic(clazz);
-	}
+    private boolean isAnonymousOrLocal(Class<?> clazz) {
+        return !Enum.class.isAssignableFrom(clazz) && (clazz.isAnonymousClass() || clazz.isLocalClass());
+    }
 
-	private boolean isStatic(Class<?> clazz) {
-		return (clazz.getModifiers() & Modifier.STATIC) != 0;
-	}
+    private boolean isInnerClass(Class<?> clazz) {
+        return clazz.isMemberClass() && !isStatic(clazz);
+    }
 
-	private boolean isValidVersion(Since since, Until until) {
-		return isValidSince(since) && isValidUntil(until);
-	}
+    private boolean isStatic(Class<?> clazz) {
+        return (clazz.getModifiers() & Modifier.STATIC) != 0;
+    }
 
-	private boolean isValidSince(Since annotation) {
-		if (annotation != null) {
-			double annotationVersion = annotation.value();
-			if (annotationVersion > version) {
-				return false;
-			}
-		}
-		return true;
-	}
+    private boolean isValidVersion(Since since, Until until) {
+        return isValidSince(since) && isValidUntil(until);
+    }
 
-	private boolean isValidUntil(Until annotation) {
-		if (annotation != null) {
-			double annotationVersion = annotation.value();
-			if (annotationVersion <= version) {
-				return false;
-			}
-		}
-		return true;
-	}
+    private boolean isValidSince(Since annotation) {
+        if (annotation != null) {
+            double annotationVersion = annotation.value();
+            if (annotationVersion > version) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    private boolean isValidUntil(Until annotation) {
+        if (annotation != null) {
+            double annotationVersion = annotation.value();
+            if (annotationVersion <= version) {
+                return false;
+            }
+        }
+        return true;
+    }
 }

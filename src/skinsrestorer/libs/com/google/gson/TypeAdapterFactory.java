@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package skinsrestorer.libs.com.google.gson;
 
 import skinsrestorer.libs.com.google.gson.reflect.TypeToken;
@@ -22,7 +21,7 @@ import skinsrestorer.libs.com.google.gson.reflect.TypeToken;
  * Creates type adapters for set of related types. Type adapter factories are most useful when several types share similar structure in their JSON form.
  *
  * <h3>Example: Converting enums to lowercase</h3> In this example, we implement a factory that creates type adapters for all enums. The type adapters will write enums in lowercase, despite the fact that they're defined in {@code CONSTANT_CASE} in the corresponding Java model:
- * 
+ *
  * <pre>
  * {
  * 	&#064;code
@@ -32,12 +31,12 @@ import skinsrestorer.libs.com.google.gson.reflect.TypeToken;
  * 			if (!rawType.isEnum()) {
  * 				return null;
  * 			}
- * 
+ *
  * 			final Map&lt;String, T&gt; lowercaseToConstant = new HashMap&lt;String, T&gt;();
  * 			for (T constant : rawType.getEnumConstants()) {
  * 				lowercaseToConstant.put(toLowercase(constant), constant);
  * 			}
- * 
+ *
  * 			return new TypeAdapter&lt;T&gt;() {
  * 				public void write(JsonWriter out, T value) throws IOException {
  * 					if (value == null) {
@@ -46,7 +45,7 @@ import skinsrestorer.libs.com.google.gson.reflect.TypeToken;
  * 						out.value(toLowercase(value));
  * 					}
  * 				}
- * 
+ *
  * 				public T read(JsonReader reader) throws IOException {
  * 					if (reader.peek() == JsonToken.NULL) {
  * 						reader.nextNull();
@@ -57,7 +56,7 @@ import skinsrestorer.libs.com.google.gson.reflect.TypeToken;
  * 				}
  * 			};
  * 		}
- * 
+ *
  * 		private String toLowercase(Object o) {
  * 			return o.toString().toLowerCase(Locale.US);
  * 		}
@@ -73,17 +72,17 @@ import skinsrestorer.libs.com.google.gson.reflect.TypeToken;
  *
  * <p>
  * As with type adapters, factories must be <i>registered</i> with a {@link skinsrestorer.libs.com.google.gson.GsonBuilder} for them to take effect:
- * 
+ *
  * <pre>
  * {@code
- * 
+ *
  *  GsonBuilder builder = new GsonBuilder();
  *  builder.registerTypeAdapterFactory(new LowercaseEnumTypeAdapterFactory());
  *  ...
  *  Gson gson = builder.create();
  * }
  * </pre>
- * 
+ *
  * If multiple factories support the same type, the factory registered earlier takes precedence.
  *
  * <h3>Example: composing other type adapters</h3>
@@ -91,7 +90,7 @@ import skinsrestorer.libs.com.google.gson.reflect.TypeToken;
  *
  * <p>
  * The type adapter <i>delegates</i> to another type adapter for the multiset elements. It figures out the element type by reflecting on the multiset's type token. A {@code Gson} is passed in to {@code create} for just this purpose:
- * 
+ *
  * <pre>
  * {
  * 	&#064;code
@@ -101,12 +100,12 @@ import skinsrestorer.libs.com.google.gson.reflect.TypeToken;
  * 			if (typeToken.getRawType() != Multiset.class || !(type instanceof ParameterizedType)) {
  * 				return null;
  * 			}
- * 
+ *
  * 			Type elementType = ((ParameterizedType) type).getActualTypeArguments()[0];
  * 			TypeAdapter&lt;?&gt; elementAdapter = gson.getAdapter(TypeToken.get(elementType));
  * 			return (TypeAdapter&lt;T&gt;) newMultisetAdapter(elementAdapter);
  * 		}
- * 
+ *
  * 		private &lt;E&gt; TypeAdapter&lt;Multiset&lt;E&gt;&gt; newMultisetAdapter(final TypeAdapter&lt;E&gt; elementAdapter) {
  * 			return new TypeAdapter&lt;Multiset&lt;E&gt;&gt;() {
  * 				public void write(JsonWriter out, Multiset&lt;E&gt; value) throws IOException {
@@ -114,7 +113,7 @@ import skinsrestorer.libs.com.google.gson.reflect.TypeToken;
  * 						out.nullValue();
  * 						return;
  * 					}
- * 
+ *
  * 					out.beginArray();
  * 					for (Multiset.Entry&lt;E&gt; entry : value.entrySet()) {
  * 						out.value(entry.getCount());
@@ -122,13 +121,13 @@ import skinsrestorer.libs.com.google.gson.reflect.TypeToken;
  * 					}
  * 					out.endArray();
  * 				}
- * 
+ *
  * 				public Multiset&lt;E&gt; read(JsonReader in) throws IOException {
  * 					if (in.peek() == JsonToken.NULL) {
  * 						in.nextNull();
  * 						return null;
  * 					}
- * 
+ *
  * 					Multiset&lt;E&gt; result = LinkedHashMultiset.create();
  * 					in.beginArray();
  * 					while (in.hasNext()) {
@@ -144,15 +143,15 @@ import skinsrestorer.libs.com.google.gson.reflect.TypeToken;
  * 	}
  * }
  * </pre>
- * 
+ *
  * Delegating from one type adapter to another is extremely powerful; it's the foundation of how Gson converts Java objects and collections. Whenever possible your factory should retrieve its delegate type adapter in the {@code create()} method; this ensures potentially-expensive type adapter creation happens only once.
  *
  * @since 2.1
  */
 public interface TypeAdapterFactory {
 
-	/**
-	 * Returns a type adapter for {@code type}, or null if this factory doesn't support {@code type}.
-	 */
-	<T> TypeAdapter<T> create(Gson gson, TypeToken<T> type);
+    /**
+     * Returns a type adapter for {@code type}, or null if this factory doesn't support {@code type}.
+     */
+    <T> TypeAdapter<T> create(Gson gson, TypeToken<T> type);
 }

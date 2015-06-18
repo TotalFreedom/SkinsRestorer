@@ -14,49 +14,46 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
  */
-
 package skinsrestorer.bukkit.commands;
 
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
-
 import skinsrestorer.bukkit.SkinsRestorer;
 import skinsrestorer.shared.storage.SkinStorage;
 import skinsrestorer.shared.utils.SkinFetchUtils.SkinFetchFailedException;
 
 public class AdminCommands implements CommandExecutor {
 
-	@Override
-	public boolean onCommand(final CommandSender sender, Command cmd, String label, final String[] args) {
-		if (!sender.hasPermission("skinsrestorer.cmds")) {
-			sender.sendMessage("You don't have permission to do this");
-			return true;
-		}
-		if ((args.length == 2) && args[0].equalsIgnoreCase("drop")) {
-			SkinStorage.getInstance().removeSkinData(args[1]);
-			sender.sendMessage(ChatColor.BLUE+"Skin data for player "+args[1]+" dropped");
-			return true;
-		} else
-		if ((args.length == 2) && args[0].equalsIgnoreCase("update")) {
-			SkinsRestorer.executor.execute(
-				new Runnable() {
-					@Override
-					public void run() {
-						String name = args[1];
-						try {
-							SkinStorage.getInstance().getOrCreateSkinData(name).attemptUpdate();
-							sender.sendMessage(ChatColor.BLUE+"Skin data updated");
-						} catch (SkinFetchFailedException e) {
-							sender.sendMessage(ChatColor.RED+"Skin fetch failed: "+e.getMessage());
-						}
-					}
-				}
-			);
-			return true;
-		}
-		return false;
-	}
+    @Override
+    public boolean onCommand(final CommandSender sender, Command cmd, String label, final String[] args) {
+        if (!sender.hasPermission("skinsrestorer.cmds")) {
+            sender.sendMessage("You don't have permission to do this");
+            return true;
+        }
+        if ((args.length == 2) && args[0].equalsIgnoreCase("drop")) {
+            SkinStorage.getInstance().removeSkinData(args[1]);
+            sender.sendMessage(ChatColor.BLUE + "Skin data for player " + args[1] + " dropped");
+            return true;
+        } else if ((args.length == 2) && args[0].equalsIgnoreCase("update")) {
+            SkinsRestorer.executor.execute(
+                    new Runnable() {
+                        @Override
+                        public void run() {
+                            String name = args[1];
+                            try {
+                                SkinStorage.getInstance().getOrCreateSkinData(name).attemptUpdate();
+                                sender.sendMessage(ChatColor.BLUE + "Skin data updated");
+                            } catch (SkinFetchFailedException e) {
+                                sender.sendMessage(ChatColor.RED + "Skin fetch failed: " + e.getMessage());
+                            }
+                        }
+                    }
+            );
+            return true;
+        }
+        return false;
+    }
 
 }

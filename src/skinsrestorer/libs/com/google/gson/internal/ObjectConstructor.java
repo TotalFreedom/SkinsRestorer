@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package skinsrestorer.libs.com.google.gson.internal;
 
 /**
@@ -24,8 +23,8 @@ package skinsrestorer.libs.com.google.gson.internal;
  */
 public interface ObjectConstructor<T> {
 
-	/**
-	 * Returns a new instance.
-	 */
-	public T construct();
+    /**
+     * Returns a new instance.
+     */
+    public T construct();
 }

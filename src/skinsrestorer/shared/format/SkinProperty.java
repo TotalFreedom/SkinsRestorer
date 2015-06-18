@@ -14,40 +14,39 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
  */
-
 package skinsrestorer.shared.format;
 
 public class SkinProperty implements Cloneable {
 
-	private String name;
-	private String value;
-	private String signature;
+    private String name;
+    private String value;
+    private String signature;
 
-	public SkinProperty(String name, String value, String signature) {
-		this.name = name;
-		this.value = value;
-		this.signature = signature;
-	}
+    public SkinProperty(String name, String value, String signature) {
+        this.name = name;
+        this.value = value;
+        this.signature = signature;
+    }
 
-	public String getName() {
-		return name;
-	}
+    public String getName() {
+        return name;
+    }
 
-	public String getValue() {
-		return value;
-	}
+    public String getValue() {
+        return value;
+    }
 
-	public boolean hasSignature() {
-		return signature != null;
-	}
+    public boolean hasSignature() {
+        return signature != null;
+    }
 
-	public String getSignature() {
-		return signature;
-	}
+    public String getSignature() {
+        return signature;
+    }
 
-	@Override
-	public SkinProperty clone() {
-		return new SkinProperty(new String(name.toCharArray()), new String(value.toCharArray()), new String(signature.toCharArray()));
-	}
+    @Override
+    public SkinProperty clone() {
+        return new SkinProperty(new String(name.toCharArray()), new String(value.toCharArray()), new String(signature.toCharArray()));
+    }
 
 }

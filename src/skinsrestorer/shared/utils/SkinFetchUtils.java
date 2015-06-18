@@ -14,11 +14,9 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
  */
-
 package skinsrestorer.shared.utils;
 
 import java.util.UUID;
-
 import skinsrestorer.libs.org.json.simple.parser.ParseException;
 import skinsrestorer.shared.format.Profile;
 import skinsrestorer.shared.format.SkinProfile;
@@ -26,66 +24,67 @@ import skinsrestorer.shared.storage.LocaleStorage;
 
 public class SkinFetchUtils {
 
-	public static SkinProfile fetchSkinProfile(String name, UUID uuid) throws SkinFetchFailedException {
-		try {
-			if (uuid != null) {
-				try {
-					SkinProfile skinprofile = MojangAPI.getSkinProfile(uuid.toString());
-					if (skinprofile.getName().equalsIgnoreCase(name)) {
-						return skinprofile;
-					}
-				} catch (SkinFetchFailedException ex) {
-				}
-			}
-			Profile profile = MojangAPI.getProfile(name);
-			return MojangAPI.getSkinProfile(profile.getId());
-		} catch (ParseException e) {
-			throw new SkinFetchFailedException(SkinFetchFailedException.Reason.SKIN_RECODE_FAILED);
-		} catch (SkinFetchFailedException sffe) {
-			throw sffe;
-		} catch (Throwable t) {
-			throw new SkinFetchFailedException(t);
-		}
-	}
+    public static SkinProfile fetchSkinProfile(String name, UUID uuid) throws SkinFetchFailedException {
+        try {
+            if (uuid != null) {
+                try {
+                    SkinProfile skinprofile = MojangAPI.getSkinProfile(uuid.toString());
+                    if (skinprofile.getName().equalsIgnoreCase(name)) {
+                        return skinprofile;
+                    }
+                } catch (SkinFetchFailedException ex) {
+                }
+            }
+            Profile profile = MojangAPI.getProfile(name);
+            return MojangAPI.getSkinProfile(profile.getId());
+        } catch (ParseException e) {
+            throw new SkinFetchFailedException(SkinFetchFailedException.Reason.SKIN_RECODE_FAILED);
+        } catch (SkinFetchFailedException sffe) {
+            throw sffe;
+        } catch (Throwable t) {
+            throw new SkinFetchFailedException(t);
+        }
+    }
 
-	public static class SkinFetchFailedException extends Exception {
+    public static class SkinFetchFailedException extends Exception {
 
-		private static final long serialVersionUID = -7597517818949217019L;
+        private static final long serialVersionUID = -7597517818949217019L;
 
-		private Reason reason;
+        private Reason reason;
 
-		public SkinFetchFailedException(Reason reason) {
-			super(reason.getExceptionCause()); 
-			this.reason = reason;
-		}
+        public SkinFetchFailedException(Reason reason) {
+            super(reason.getExceptionCause());
+            this.reason = reason;
+        }
 
-		public SkinFetchFailedException(Throwable exception) {
-			super(Reason.GENERIC_ERROR.getExceptionCause()+": "+exception.getClass().getName()+": "+exception.getMessage(), exception); 
-			this.reason = Reason.GENERIC_ERROR;
-		}
+        public SkinFetchFailedException(Throwable exception) {
+            super(Reason.GENERIC_ERROR.getExceptionCause() + ": " + exception.getClass().getName() + ": " + exception.getMessage(), exception);
+            this.reason = Reason.GENERIC_ERROR;
+        }
 
-		public Reason getReason() {
-			return reason;
-		}
+        public Reason getReason() {
+            return reason;
+        }
 
-		public static enum Reason {
-			NO_PREMIUM_PLAYER(LocaleStorage.getInstance().SKIN_FETCH_FAILED_NO_PREMIUM_PLAYER),
-			NO_SKIN_DATA(LocaleStorage.getInstance().SKIN_FETCH_FAILED_NO_SKIN_DATA),
-			SKIN_RECODE_FAILED(LocaleStorage.getInstance().SKIN_FETCH_FAILED_PARSE_FAILED),
-			RATE_LIMITED(LocaleStorage.getInstance().SKIN_FETCH_FAILED_RATE_LIMITED),
-			GENERIC_ERROR(LocaleStorage.getInstance().SKIN_FETCH_FAILED_ERROR);
+        public static enum Reason {
 
-			private String exceptionCause;
+            NO_PREMIUM_PLAYER(LocaleStorage.getInstance().SKIN_FETCH_FAILED_NO_PREMIUM_PLAYER),
+            NO_SKIN_DATA(LocaleStorage.getInstance().SKIN_FETCH_FAILED_NO_SKIN_DATA),
+            SKIN_RECODE_FAILED(LocaleStorage.getInstance().SKIN_FETCH_FAILED_PARSE_FAILED),
+            RATE_LIMITED(LocaleStorage.getInstance().SKIN_FETCH_FAILED_RATE_LIMITED),
+            GENERIC_ERROR(LocaleStorage.getInstance().SKIN_FETCH_FAILED_ERROR);
 
-			private Reason(String exceptionCause) {
-				this.exceptionCause = exceptionCause;
-			}
+            private String exceptionCause;
 
-			public String getExceptionCause() {
-				return exceptionCause;
-			}
-		}
-		
-	}
+            private Reason(String exceptionCause) {
+                this.exceptionCause = exceptionCause;
+            }
+
+            public String getExceptionCause() {
+                return exceptionCause;
+            }
+        }
+
+    }
 
 }

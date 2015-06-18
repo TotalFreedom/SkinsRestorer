@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package skinsrestorer.libs.com.google.gson.annotations;
 
 import java.lang.annotation.ElementType;
@@ -30,7 +29,7 @@ import java.lang.annotation.Target;
  * <p>
  * Here is an example of how this annotation is meant to be used:
  * </p>
- * 
+ *
  * <pre>
  * public class User {
  *   private String firstName;
@@ -49,11 +48,11 @@ import java.lang.annotation.Target;
  * @since 1.3
  */
 @Retention(RetentionPolicy.RUNTIME)
-@Target({ ElementType.FIELD, ElementType.TYPE })
+@Target({ElementType.FIELD, ElementType.TYPE})
 public @interface Until {
 
-	/**
-	 * the value indicating a version number until this member or type should be ignored.
-	 */
-	double value();
+    /**
+     * the value indicating a version number until this member or type should be ignored.
+     */
+    double value();
 }

@@ -14,7 +14,6 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
  */
-
 package skinsrestorer.shared.utils;
 
 import java.io.BufferedInputStream;
@@ -29,12 +28,12 @@ import java.nio.charset.StandardCharsets;
 
 public class IOUils {
 
-	public static InputStreamReader createReader(File file) throws FileNotFoundException {
-		return new InputStreamReader(new BufferedInputStream(new FileInputStream(file)), StandardCharsets.UTF_8);
-	}
+    public static InputStreamReader createReader(File file) throws FileNotFoundException {
+        return new InputStreamReader(new BufferedInputStream(new FileInputStream(file)), StandardCharsets.UTF_8);
+    }
 
-	public static OutputStreamWriter createWriter(File file) throws FileNotFoundException {
-		return new OutputStreamWriter(new BufferedOutputStream(new FileOutputStream(file)), StandardCharsets.UTF_8);
-	}
+    public static OutputStreamWriter createWriter(File file) throws FileNotFoundException {
+        return new OutputStreamWriter(new BufferedOutputStream(new FileOutputStream(file)), StandardCharsets.UTF_8);
+    }
 
 }

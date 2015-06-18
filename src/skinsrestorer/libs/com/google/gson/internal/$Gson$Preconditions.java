@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package skinsrestorer.libs.com.google.gson.internal;
 
 /**
@@ -30,16 +29,17 @@ package skinsrestorer.libs.com.google.gson.internal;
  * @author Joel Leitch
  */
 public final class $Gson$Preconditions {
-	public static <T> T checkNotNull(T obj) {
-		if (obj == null) {
-			throw new NullPointerException();
-		}
-		return obj;
-	}
 
-	public static void checkArgument(boolean condition) {
-		if (!condition) {
-			throw new IllegalArgumentException();
-		}
-	}
+    public static <T> T checkNotNull(T obj) {
+        if (obj == null) {
+            throw new NullPointerException();
+        }
+        return obj;
+    }
+
+    public static void checkArgument(boolean condition) {
+        if (!condition) {
+            throw new IllegalArgumentException();
+        }
+    }
 }

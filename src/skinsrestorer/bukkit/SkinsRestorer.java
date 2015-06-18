@@ -14,17 +14,14 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
  */
-
 package skinsrestorer.bukkit;
 
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Logger;
-
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
-
 import skinsrestorer.bukkit.commands.AdminCommands;
 import skinsrestorer.bukkit.commands.PlayerCommands;
 import skinsrestorer.bukkit.listeners.LoginListener;
@@ -34,35 +31,37 @@ import skinsrestorer.shared.storage.SkinStorage;
 
 public class SkinsRestorer extends JavaPlugin implements Listener {
 
-	public static final ScheduledExecutorService executor = Executors.newSingleThreadScheduledExecutor();
+    public static final ScheduledExecutorService executor = Executors.newSingleThreadScheduledExecutor();
 
-	private static SkinsRestorer instance;
-	public static SkinsRestorer getInstance() {
-		return instance;
-	}
+    private static SkinsRestorer instance;
 
-	private Logger log;
-	public void logInfo(String message) {
-		log.info(message);
-	}
+    public static SkinsRestorer getInstance() {
+        return instance;
+    }
 
-	@Override
-	public void onEnable() {
-		instance = this;
-		log = getLogger();
-		LocaleStorage.init(getDataFolder());
-		SkinStorage.init(getDataFolder());
-		getCommand("skinsrestorer").setExecutor(new AdminCommands());
-		getCommand("skin").setExecutor(new PlayerCommands());
-		getServer().getPluginManager().registerEvents(new LoginListener(), this);
-		executor.scheduleWithFixedDelay(CooldownStorage.cleanupCooldowns, 0, 1, TimeUnit.MINUTES);
-	}
+    private Logger log;
 
-	@Override
-	public void onDisable() {
-		SkinStorage.getInstance().saveData();
-		executor.shutdown();
-		instance = null;
-	}
+    public void logInfo(String message) {
+        log.info(message);
+    }
+
+    @Override
+    public void onEnable() {
+        instance = this;
+        log = getLogger();
+        LocaleStorage.init(getDataFolder());
+        SkinStorage.init(getDataFolder());
+        getCommand("skinsrestorer").setExecutor(new AdminCommands());
+        getCommand("skin").setExecutor(new PlayerCommands());
+        getServer().getPluginManager().registerEvents(new LoginListener(), this);
+        executor.scheduleWithFixedDelay(CooldownStorage.cleanupCooldowns, 0, 1, TimeUnit.MINUTES);
+    }
+
+    @Override
+    public void onDisable() {
+        SkinStorage.getInstance().saveData();
+        executor.shutdown();
+        instance = null;
+    }
 
 }

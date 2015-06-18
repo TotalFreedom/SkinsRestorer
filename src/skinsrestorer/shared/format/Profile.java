@@ -14,30 +14,29 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
  */
-
 package skinsrestorer.shared.format;
 
 public class Profile implements Cloneable {
 
-	private String id;
-	private String name;
+    private String id;
+    private String name;
 
-	public Profile(String id, String name) {
-		this.id = id != null ? id.replace("-", "") : null;
-		this.name = name.toLowerCase();
-	}
+    public Profile(String id, String name) {
+        this.id = id != null ? id.replace("-", "") : null;
+        this.name = name.toLowerCase();
+    }
 
-	public String getId() {
-		return id;
-	}
+    public String getId() {
+        return id;
+    }
 
-	public String getName() {
-		return name;
-	}
+    public String getName() {
+        return name;
+    }
 
-	@Override
-	public Profile clone() {
-		return new Profile(id, name);
-	}
+    @Override
+    public Profile clone() {
+        return new Profile(id, name);
+    }
 
 }

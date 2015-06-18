@@ -13,14 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package skinsrestorer.libs.com.google.gson.annotations;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
-
 import skinsrestorer.libs.com.google.gson.TypeAdapter;
 import skinsrestorer.libs.com.google.gson.TypeAdapterFactory;
 
@@ -30,7 +28,7 @@ import skinsrestorer.libs.com.google.gson.TypeAdapterFactory;
  * <p>
  * Here is an example of how this annotation is used:
  * </p>
- * 
+ *
  * <pre>
  * &#64JsonAdapter(UserJsonAdapter.class)
  * public class User {
@@ -64,7 +62,7 @@ import skinsrestorer.libs.com.google.gson.TypeAdapterFactory;
  *
  * <p>
  * Here is an example of how to apply this annotation to a field.
- * 
+ *
  * <pre>
  * private static final class Gadget {
  *   &#64JsonAdapter(UserJsonAdapter2.class)
@@ -88,10 +86,12 @@ import skinsrestorer.libs.com.google.gson.TypeAdapterFactory;
  */
 // Note that the above example is taken from AdaptAnnotationTest.
 @Retention(RetentionPolicy.RUNTIME)
-@Target({ ElementType.TYPE, ElementType.FIELD })
+@Target({ElementType.TYPE, ElementType.FIELD})
 public @interface JsonAdapter {
 
-	/** Either a {@link TypeAdapter} or {@link TypeAdapterFactory}. */
-	Class<?> value();
+    /**
+     * Either a {@link TypeAdapter} or {@link TypeAdapterFactory}.
+     */
+    Class<?> value();
 
 }
